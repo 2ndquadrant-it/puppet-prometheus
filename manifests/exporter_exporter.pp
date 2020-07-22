@@ -7,7 +7,6 @@ class prometheus::exporter_exporter (
   String[1] $package_name,
   String[1] $user,
   String[1] $version,
-  Hash[String[1],String[1]] $data_source_custom = {},
   String $config_file                           = '/etc/exporter_exporter.yaml',
   Boolean $purge_config_dir                     = true,
   Boolean $restart_on_change                    = true,
