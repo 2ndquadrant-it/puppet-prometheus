@@ -19,6 +19,7 @@ class prometheus::exporter_exporter (
   Boolean $manage_service                       = true,
   Boolean $manage_user                          = true,
   String[1] $os                                 = downcase($facts['kernel']),
+  String $extra_options                         = '',
   Optional[String] $download_url                = undef,
   String $config_mode                           = $prometheus::config_mode,
   String[1] $arch                               = $prometheus::real_arch,
@@ -27,10 +28,6 @@ class prometheus::exporter_exporter (
   Stdlib::Port $scrape_port                     = 9998,
   Optional[Hash] $scrape_job_labels             = undef,
   Hash $modules                                 = {},
-  Boolean $ssl                                  = false,
-  String $listen_ssl                            = '',
-  String $cert_path                             = '',
-  String $key_path                              = '',
 ) inherits prometheus {
 
   $release = "v${version}"
@@ -42,13 +39,7 @@ class prometheus::exporter_exporter (
     default => undef,
   }
 
-  if $ssl {
-    $ssl_options = "--web.tls.listen-address=${listen_ssl} --web.tls.cert=${cert_path} --web.tls.key=${key_path}"
-  } else {
-    $ssl_options = ''
-  }
-
-  $options = "--config.file=${config_file} ${ssl_options}"
+  $options = "--config.file=${config_file} ${extra_options}"
 
   file { $config_file:
     ensure  => present,
